@@ -6,7 +6,7 @@
 /*   By: demane <emanedanielakim@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/19 14:51:47 by demane            #+#    #+#             */
-/*   Updated: 2025/12/19 15:25:05 by demane           ###   ########.fr       */
+/*   Updated: 2025/12/21 17:40:58 by demane           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,19 +17,33 @@
 # include <sys/wait.h>
 # include <sys/types.h>
 # include <fcntl.h>
-// # include ""
+# include "../libft/libft.h"
+
+typedef struct cmd
+{
+	char	*cmd;
+	char	**arg;
+}	t_cmd;
 
 typedef struct s_pipex
 {
-	int		infile;//C’est le file descriptor du fichier d’entrée.
-	int		outfile;//C’est le file descriptor du fichier de sortie
-	int		here_doc;//Un flag (0 ou 1) pour savoir si on est en mode here_doc.
-	int		cmd_count;//Nombre total de commandes à exécuter.
-	int		cmd_index;//Index de la commande en cours d’exécution.
-	char	**envp;//Copie de envp reçue dans main.
-	char	***cmds;//Toutes les commandes, déjà découpées.
-	int		prev_fd;//Stocke le fd du pipe précédent.
-	int		pipe_fd[2];//Le pipe courant.
+	int		infile;
+	int		outfile;
+	int		here_doc;
+	int		cmd_count;
+	int		cmd_index;
+	char	**envp;
+	t_cmd	*cmds;
+	int		prev_fd;
+	int		pipe_fd[2];
 }	t_pipex;
+
+
+void	ft_init_pipex(int ac, char **av, char **envp, t_pipex *pip);
+t_cmd	ft_parse_cmd(char *cmd_line);
+char	*ft_get_path(char **envp);
+int		ft_here_doc(t_pipex *pip, char *limiter);
+int		ft_exec_cmd(char *path, t_cmd *cmd);
+char	*get_next_line(int fd);
 
 #endif

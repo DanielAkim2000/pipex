@@ -6,13 +6,13 @@
 #    By: demane <emanedanielakim@gmail.com>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/11/10 11:33:07 by demane            #+#    #+#              #
-#    Updated: 2025/12/16 17:07:33 by demane           ###   ########.fr        #
+#    Updated: 2025/12/21 17:35:41 by demane           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libft.a
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -I libft.h
+CFLAGS = -Wall -Wextra -Werror -I.
 AR = @ar rcs
 RM = @rm -f
 
@@ -24,7 +24,7 @@ SRCS = ft_atoi.c ft_bzero.c ft_calloc.c ft_isalnum.c ft_isalpha.c \
 	   ft_strlcpy.c ft_strlen.c ft_strmapi.c ft_strncmp.c ft_strnstr.c \
 	   ft_strrchr.c ft_strtrim.c ft_substr.c ft_tolower.c ft_toupper.c \
 	   ft_intlen.c ft_maxint.c ft_minint.c ft_has_duplicates.c ft_putnbr_base_fd.c \
-	   ft_atol.c ft_free.c
+	   ft_atol.c ft_free.c ft_strjoin_sep.c
 
 SRCS_BONUS =  ft_lstlast.c ft_lstdelone.c ft_lstsize.c ft_lstclear.c \
 			  ft_lstnew.c ft_lstadd_front.c ft_lstadd_back.c ft_lstiter.c ft_lstmap.c
