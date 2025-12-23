@@ -6,7 +6,7 @@
 /*   By: demane <emanedanielakim@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/19 14:51:47 by demane            #+#    #+#             */
-/*   Updated: 2025/12/21 17:40:58 by demane           ###   ########.fr       */
+/*   Updated: 2025/12/23 15:28:53 by demane           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <sys/types.h>
 # include <fcntl.h>
 # include "../libft/libft.h"
+# include <stdio.h>
 
 typedef struct cmd
 {
@@ -41,9 +42,9 @@ typedef struct s_pipex
 
 void	ft_init_pipex(int ac, char **av, char **envp, t_pipex *pip);
 t_cmd	ft_parse_cmd(char *cmd_line);
-char	*ft_get_path(char **envp);
+char	*ft_get_path(char **envp, t_cmd cmd);
 int		ft_here_doc(t_pipex *pip, char *limiter);
-int		ft_exec_cmd(char *path, t_cmd *cmd);
+int		ft_exec_cmd(char *path, t_cmd *cmd, char **envp);
 char	*get_next_line(int fd);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: demane <emanedanielakim@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/19 14:51:15 by demane            #+#    #+#             */
-/*   Updated: 2025/12/21 17:41:49 by demane           ###   ########.fr       */
+/*   Updated: 2025/12/23 15:28:57 by demane           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,9 @@ int	main(int ac, char **av, char **envp)
 		// if (!pip.cmds[i].cmd)
 		// 	return (ft_perror("malloc"), ft_free_pip(pip, i));
 	}
-	path = ft_get_path(pip.envp);
-	// if (!path)
-	// 	return (perror());
+	// path = ft_get_path(pip.envp);
+	// // if (!path)
+	// // 	return (perror());
 	if (pip.here_doc)
 	{
 		if (ft_here_doc(&pip, av[2]) == -1)
@@ -49,6 +49,8 @@ int	main(int ac, char **av, char **envp)
 	}
 	pip.prev_fd = pip.infile;
 	i = 0;
+	// printf("ETAT\n");
+	// printf("nb_cmd: %d, pip.prev_fd : %d\n", pip.cmd_count, pip.prev_fd);
 	while (i < pip.cmd_count)
 	{
 		if (i < pip.cmd_count -1)
@@ -68,7 +70,8 @@ int	main(int ac, char **av, char **envp)
 			else
 				close(pip.outfile);
 			close(pip.prev_fd);
-			ft_exec_cmd(path, &pip.cmds[i]);
+			path = ft_get_path(envp, pip.cmds[i]);
+			ft_exec_cmd(path, &pip.cmds[i], envp);
 		}
 		close(pip.prev_fd);
 		if (i < pip.cmd_count - 1)

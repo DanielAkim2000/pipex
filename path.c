@@ -6,7 +6,7 @@
 /*   By: demane <emanedanielakim@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/20 21:40:32 by demane            #+#    #+#             */
-/*   Updated: 2025/12/21 17:37:57 by demane           ###   ########.fr       */
+/*   Updated: 2025/12/23 15:31:38 by demane           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	ft_access(char *path)
 	return (0);
 }
 
-char	*ft_get_path(char **envp)
+char	*ft_get_path(char **envp, t_cmd cmd)
 {
 	char	*path;
 	int		index;
@@ -49,16 +49,14 @@ char	*ft_get_path(char **envp)
 	split_val = ft_split(path, ':');
 	if (!split_val)
 		return (NULL);
-	path = "";
 	i = -1;
 	while (split_val[++i])
 	{
-		path = ft_strjoin_sep(path, split_val[i], '/');
-		if (!path)
-			// return (ft_free_all(split_val, i), NULL);
-			return (NULL);
+		path = ft_strjoin_sep(split_val[i], cmd.cmd, '/');
 		if (ft_access(path))
-			return (path);
+			return (ft_free((void **)&split_val[i]), ft_free((void **)&split_val), path);
+		ft_free((void **)&split_val[i]);
+		ft_free((void **)&path);
 	}
-	return (NULL);
+	return (ft_free((void **)&split_val), NULL);
 }
