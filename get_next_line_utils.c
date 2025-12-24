@@ -6,7 +6,7 @@
 /*   By: demane <emanedanielakim@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 14:32:14 by demane            #+#    #+#             */
-/*   Updated: 2025/12/17 21:55:32 by demane           ###   ########.fr       */
+/*   Updated: 2025/12/23 15:02:35 by demane           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,13 +66,15 @@ int	ft_reintialise(t_line **l)
 		while (str[j] != '\n')
 			j++;
 		lastvalue = (*l)->line;
-		(*l)->line = (char *)malloc(sizeof(char) * (ft_strlen_gnl(str) - j + 1));
+		(*l)->line = (char *)malloc(sizeof(char)
+				* (ft_strlen_gnl(str) - j + 1));
 		if ((*l)->line == NULL)
 			return (free(lastvalue), 1);
 		i = 0;
 		while (str[++j])
 			(*l)->line[i++] = str[j];
-		(*l)->line[i] = '\0';
+		if (i == 0)
+			return (free((*l)->line), (*l)->line = NULL, free(lastvalue), 0);
 		return ((*l)->line[i] = '\0', free(lastvalue), 0);
 	}
 	else

@@ -6,7 +6,7 @@
 /*   By: demane <emanedanielakim@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/20 21:40:32 by demane            #+#    #+#             */
-/*   Updated: 2025/12/23 15:31:38 by demane           ###   ########.fr       */
+/*   Updated: 2025/12/25 00:25:21 by demane           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,18 +29,21 @@ int	ft_access(char *path)
 {
 	int	acs_val;
 
+	if (!path)
+		return (0);
 	acs_val = access(path, X_OK);
 	if (acs_val == 0)
 		return (1);
 	return (0);
 }
 
-char	*ft_get_path(char **envp, t_cmd cmd)
+char	*ft_get_path(char **envp, t_cmd cmd, t_pipex p)
 {
 	char	*path;
 	int		index;
 	char	**split_val;
 	int		i;
+	int		j;
 
 	index = ft_get_index_path(envp);
 	if (index == -1)
@@ -50,13 +53,36 @@ char	*ft_get_path(char **envp, t_cmd cmd)
 	if (!split_val)
 		return (NULL);
 	i = -1;
+	if (ft_access(cmd.cmd))
+	{
+		while (split_val[++i])
+			ft_free((void **)&split_val[i]);
+		path = ft_strdup(cmd.cmd);
+		if (!path)
+		{
+			ft_free((void **)&split_val);
+			ft_free_all_pipex(&p);
+			exit(1);
+		}
+		return (ft_free((void **)&split_val), path);
+	}
 	while (split_val[++i])
 	{
 		path = ft_strjoin_sep(split_val[i], cmd.cmd, '/');
+		if (!path)
+		{
+			j = -1;
+			while (split_val[++j])
+				ft_free((void **)&split_val[j]);
+			ft_free((void **)&split_val);
+			ft_free_all_pipex(&p);
+			exit(1);
+		}
 		if (ft_access(path))
-			return (ft_free((void **)&split_val[i]), ft_free((void **)&split_val), path);
+			return (ft_free((void **)&split_val[i]),\
+				ft_free((void **)&split_val), path);
 		ft_free((void **)&split_val[i]);
 		ft_free((void **)&path);
 	}
-	return (ft_free((void **)&split_val), NULL);
+	return (ft_free((void **)&split_val), ft_throw_error_cmd(cmd.cmd, p), NULL);
 }

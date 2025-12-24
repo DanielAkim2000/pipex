@@ -6,14 +6,20 @@
 #    By: demane <emanedanielakim@gmail.com>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/22 11:34:31 by demane            #+#    #+#              #
-#    Updated: 2025/12/22 12:11:28 by demane           ###   ########.fr        #
+#    Updated: 2025/12/25 00:32:05 by demane           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME_BONUS = pipex
+NAME_BONUS = pipex_bonus
+NAME_MANDATORY = pipex
+
+SRCS = error.c exec.c free.c get_next_line.c get_next_line_utils.c \
+			here_doc.c init.c main_mandatory.c parse.c path.c process.c utils.c 
 
 SRCS_BONUS = error.c exec.c free.c get_next_line.c get_next_line_utils.c \
-			here_doc.c init.c main.c parse.c path.c pipe.c utils.c
+			here_doc.c init.c main_bonus.c parse.c path.c process.c utils.c 
+			
+OBJS = $(SRCS:.c=.o)
 
 OBJS_BONUS = $(SRCS_BONUS:.c=.o)
 
@@ -27,7 +33,12 @@ RM = rm -rf
 
 FLAGS = -Wall -Wextra -Werror
 
+all : $(NAME_MANDATORY)
+
 bonus: $(NAME_BONUS)
+
+$(NAME_MANDATORY): $(OBJS) $(LIBFT)
+	$(CC) $(FLAGS)  $(OBJS) $(LIBFT) -o $(NAME_MANDATORY)
 
 $(NAME_BONUS): $(OBJS_BONUS) $(LIBFT)
 	$(CC) $(FLAGS)  $(OBJS_BONUS) $(LIBFT) -o $(NAME_BONUS)
@@ -39,11 +50,13 @@ $(LIBFT):
 	$(CC) $(FLAGS) -c $< -o $@
 
 clean:
-	$(RM) $(OBJS_BONUS)
+	$(RM) $(OBJS_BONUS) $(OBJS)
 
 fclean: clean
 	$(RM) $(NAME_BONUS)
 
-re: bonus clean fclean
+re: fclean all
+
+rebonus: fclean bonus
 
 .PHONY: all re fclean bonus clean
