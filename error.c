@@ -6,7 +6,7 @@
 /*   By: demane <emanedanielakim@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/24 16:53:43 by demane            #+#    #+#             */
-/*   Updated: 2025/12/25 00:24:35 by demane           ###   ########.fr       */
+/*   Updated: 2025/12/26 01:14:11 by demane           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,22 @@
 
 void	ft_throw_error_cmd(char *err_p, t_pipex p)
 {
-	if (errno == EACCES)
-	{
-		perror(err_p);
-		ft_free_all_pipex(&p);
-		exit (127);
-	}
+	perror(err_p);
+	ft_free_all_pipex(&p);
+	if (errno == EACCES || errno == ENOEXEC)
+		exit (126);
 	if (errno == ENOENT)
-	{
-		ft_putstr_fd(err_p, STDERR_FILENO);
-		ft_putstr_fd(": command not found\n", STDERR_FILENO);
-		ft_free_all_pipex(&p);
 		exit(127);
-	}
-	// if (errno == E)
+	exit(1);
+}
+
+void	ft_throw_err_cmd_not_found(t_cmd cmd, void **split_val, t_pipex p)
+{
+	perror(cmd.cmd);
+	ft_putstr_fd("command not found: ", STDERR_FILENO);
+	ft_putstr_fd(cmd.cmd, STDERR_FILENO);
+	ft_putstr_fd("\n", STDERR_FILENO);
+	ft_free_all_pipex(&p);
+	ft_free(split_val);
+	exit(127);
 }

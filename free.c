@@ -6,11 +6,18 @@
 /*   By: demane <emanedanielakim@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/24 20:43:22 by demane            #+#    #+#             */
-/*   Updated: 2025/12/24 20:43:37 by demane           ###   ########.fr       */
+/*   Updated: 2025/12/25 23:49:02 by demane           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/pipex.h"
+
+void	ft_free_pid(t_pid *pid)
+{
+	ft_free((void **)&pid->pid);
+	ft_free((void **)&pid->status);
+}
+
 
 void	ft_free_all_pipex(t_pipex *p)
 {
@@ -31,6 +38,6 @@ void	ft_free_all_pipex(t_pipex *p)
 			p->cmds[i].cmd = NULL;
 		}
 	}
-	ft_free((void **)&p->pid);
+	ft_free_pid(&p->pid);
 	ft_free((void **)&p->cmds);
 }

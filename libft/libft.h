@@ -6,7 +6,7 @@
 /*   By: demane <emanedanielakim@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 14:01:46 by demane            #+#    #+#             */
-/*   Updated: 2025/12/20 22:14:45 by demane           ###   ########.fr       */
+/*   Updated: 2025/12/25 01:07:19 by demane           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ int		ft_tolower(int c);
 int		ft_intlen(int c);
 int		ft_maxint(int count, ...);
 int		ft_minint(int count, ...);
+int		ft_str_is_space(char *str);
 
 /* Fonctions de manipulation de mémoire */
 void	*ft_memset(void *ptr, int c, size_t n);

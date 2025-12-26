@@ -6,7 +6,7 @@
 /*   By: demane <emanedanielakim@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/20 21:40:32 by demane            #+#    #+#             */
-/*   Updated: 2025/12/25 00:25:21 by demane           ###   ########.fr       */
+/*   Updated: 2025/12/26 01:03:55 by demane           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	ft_get_index_path(char **envp)
 	return (-1);
 }
 
-int	ft_access(char *path)
+int	ft_access(char *path, t_pipex p)
 {
 	int	acs_val;
 
@@ -34,6 +34,12 @@ int	ft_access(char *path)
 	acs_val = access(path, X_OK);
 	if (acs_val == 0)
 		return (1);
+	if (errno == EACCES)
+	{
+		perror(path);
+		ft_free_all_pipex(&p);
+		exit(126);
+	}
 	return (0);
 }
 
@@ -45,27 +51,30 @@ char	*ft_get_path(char **envp, t_cmd cmd, t_pipex p)
 	int		i;
 	int		j;
 
+	if (!cmd.cmd || ft_strlen(cmd.cmd) == 0 || ft_str_is_space(cmd.cmd))
+		ft_throw_err_cmd_not_found(cmd, (void **)NULL, p);
+	if (ft_access(cmd.cmd, p))
+	{
+		path = ft_strdup(cmd.cmd);
+		if (!path)
+		{
+			ft_free_all_pipex(&p);
+			exit(1);
+		}
+		return (path);
+	}
 	index = ft_get_index_path(envp);
 	if (index == -1)
+	{
+		ft_throw_err_cmd_not_found(cmd, (void **)NULL, p);
 		return (NULL);
+	}
+	split_val = NULL;
 	path = envp[index] + 5;
 	split_val = ft_split(path, ':');
 	if (!split_val)
 		return (NULL);
 	i = -1;
-	if (ft_access(cmd.cmd))
-	{
-		while (split_val[++i])
-			ft_free((void **)&split_val[i]);
-		path = ft_strdup(cmd.cmd);
-		if (!path)
-		{
-			ft_free((void **)&split_val);
-			ft_free_all_pipex(&p);
-			exit(1);
-		}
-		return (ft_free((void **)&split_val), path);
-	}
 	while (split_val[++i])
 	{
 		path = ft_strjoin_sep(split_val[i], cmd.cmd, '/');
@@ -78,11 +87,12 @@ char	*ft_get_path(char **envp, t_cmd cmd, t_pipex p)
 			ft_free_all_pipex(&p);
 			exit(1);
 		}
-		if (ft_access(path))
+		if (ft_access(path, p))
 			return (ft_free((void **)&split_val[i]),\
 				ft_free((void **)&split_val), path);
 		ft_free((void **)&split_val[i]);
 		ft_free((void **)&path);
 	}
-	return (ft_free((void **)&split_val), ft_throw_error_cmd(cmd.cmd, p), NULL);
+	ft_throw_err_cmd_not_found(cmd, (void **)&split_val, p);
+	return (NULL);
 }

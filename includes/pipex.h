@@ -6,7 +6,7 @@
 /*   By: demane <emanedanielakim@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/19 14:51:47 by demane            #+#    #+#             */
-/*   Updated: 2025/12/25 00:24:51 by demane           ###   ########.fr       */
+/*   Updated: 2025/12/26 00:07:03 by demane           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,17 @@
 # include <stdio.h>
 # include <errno.h>
 
-typedef struct cmd
+typedef struct s_cmd
 {
 	char	*cmd;
 	char	**arg;
 }	t_cmd;
+
+typedef struct s_pid
+{
+	int	*pid;
+	int	*status;
+}	t_pid;
 
 typedef struct s_pipex
 {
@@ -35,7 +41,9 @@ typedef struct s_pipex
 	int		cmd_count;
 	t_cmd	*cmds;
 	int		prev_fd;
-	int		*pid;
+	t_pid	pid;
+	char	*outfile_name;
+	int		open_mode;
 }	t_pipex;
 
 
@@ -52,9 +60,10 @@ void	ft_free_all_pipex(t_pipex *p);
 void	ft_parse_all_cmd(t_pipex *pip, char **av);
 void	ft_process_child(t_pipex *pip, char **envp, int fd[2], int index);
 void	ft_process_parent(t_pipex *pip, char **envp);
-void	ft_wait_all_child(t_pipex pip, int *status);
+void	ft_wait_all_child(t_pipex *pip);
 void	ft_verif_here_doc(t_pipex *pip, char **av);
 void	ft_alloc_pip(t_pipex *pip);
-int		ft_exit_pg(t_pipex pip, char **av, int ac, int status);
+int		ft_exit_pg(t_pipex *pip);
+void	ft_throw_err_cmd_not_found(t_cmd cmd, void **split_val, t_pipex p);
 
 #endif
