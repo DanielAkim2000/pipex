@@ -6,7 +6,7 @@
 #    By: demane <emanedanielakim@gmail.com>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/22 11:34:31 by demane            #+#    #+#              #
-#    Updated: 2025/12/25 00:32:05 by demane           ###   ########.fr        #
+#    Updated: 2025/12/30 15:18:42 by demane           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,11 +14,11 @@ NAME_BONUS = pipex_bonus
 NAME_MANDATORY = pipex
 
 SRCS = error.c exec.c free.c get_next_line.c get_next_line_utils.c \
-			here_doc.c init.c main_mandatory.c parse.c path.c process.c utils.c 
+			here_doc.c init.c main_mandatory.c parse.c path.c process.c utils.c
 
 SRCS_BONUS = error.c exec.c free.c get_next_line.c get_next_line_utils.c \
-			here_doc.c init.c main_bonus.c parse.c path.c process.c utils.c 
-			
+			here_doc.c init.c main_bonus.c parse.c path.c process.c utils.c
+
 OBJS = $(SRCS:.c=.o)
 
 OBJS_BONUS = $(SRCS_BONUS:.c=.o)
@@ -50,10 +50,12 @@ $(LIBFT):
 	$(CC) $(FLAGS) -c $< -o $@
 
 clean:
+	make --directory=$(LIBFT_DIR) clean
 	$(RM) $(OBJS_BONUS) $(OBJS)
 
 fclean: clean
-	$(RM) $(NAME_BONUS)
+	make --directory=$(LIBFT_DIR) fclean
+	$(RM) $(NAME_BONUS) $(NAME_MANDATORY)
 
 re: fclean all
 

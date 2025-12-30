@@ -6,7 +6,7 @@
 /*   By: demane <emanedanielakim@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/19 14:51:47 by demane            #+#    #+#             */
-/*   Updated: 2025/12/26 00:07:03 by demane           ###   ########.fr       */
+/*   Updated: 2025/12/30 16:32:30 by demane           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ typedef struct s_pipex
 	char	*outfile_name;
 	int		open_mode;
 }	t_pipex;
-
 
 void	ft_init_pipex_mandatory(int ac, char **av, t_pipex *pip);
 void	ft_init_pipex_bonus(int ac, char **av, t_pipex *pip);

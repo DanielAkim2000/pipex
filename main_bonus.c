@@ -6,7 +6,7 @@
 /*   By: demane <emanedanielakim@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/19 14:51:15 by demane            #+#    #+#             */
-/*   Updated: 2025/12/26 00:35:22 by demane           ###   ########.fr       */
+/*   Updated: 2025/12/26 14:27:41 by demane           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,15 +21,10 @@ void	ft_invalid_ac_av_envp(int ac, char **av)
 	}
 	if (ft_strncmp(av[1], "here_doc", 8) == 0 && ac < 6)
 	{
-		ft_putstr_fd("Error: invalid number of arguments for here_doc\n",\
-						 STDERR_FILENO);
+		ft_putstr_fd("Error: invalid number of arguments for here_doc\n", \
+						STDERR_FILENO);
 		exit (1);
 	}
-	// if (!envp)
-	// {
-	// 	ft_putstr_fd("envp: Not envp setted\n", STDERR_FILENO);
-	// 	exit(1);
-	// }
 }
 
 void	ft_verif_infile(t_pipex *pip, char **av)

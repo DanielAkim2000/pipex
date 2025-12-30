@@ -6,7 +6,7 @@
 /*   By: demane <emanedanielakim@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/20 22:41:24 by demane            #+#    #+#             */
-/*   Updated: 2025/12/26 00:53:17 by demane           ###   ########.fr       */
+/*   Updated: 2025/12/30 17:11:16 by demane           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,23 +30,6 @@ void	ft_redirec_to_outfile(t_pipex *pip, char **envp, int index)
 	path = ft_get_path(envp, pip->cmds[index], *pip);
 	if (path)
 		ft_exec_cmd(path, &pip->cmds[index], envp, *pip);
-}
-
-void	ft_wait_all_child_not_block(t_pipex *pip)
-{
-	int		j;
-	t_pid	*pid;
-
-	j = 0;
-	pid = &pip->pid;
-	while (j < pip->cmd_count)
-	{
-		if (pip->pid.pid[j] != -1)
-		{
-			waitpid(pid->pid[j], &(pid->status[j]), WNOHANG);
-		}
-		j++;
-	}
 }
 
 void	ft_process_child(t_pipex *pip, char **envp, int fd[2], int index)
@@ -89,7 +72,6 @@ int	ft_process_cmd_not_end(int *i, t_pipex *pip, int fd[2], char **envp)
 		close(pip->prev_fd);
 		close(fd[1]);
 		pip->prev_fd = fd[0];
-		ft_wait_all_child_not_block(pip);
 	}
 	return (0);
 }
@@ -105,29 +87,34 @@ void	ft_process_parent(t_pipex *pip, char **envp)
 	i = -1;
 	if (ft_process_cmd_not_end(&i, pip, fd, envp) == -1)
 		return ((void)0);
-	pip->pid.pid[i] = fork();
-	if (pip->pid.pid[i] == -1)
+	pip->pid.pid[pip->cmd_count -1] = fork();
+	if (pip->pid.pid[pip->cmd_count -1] == -1)
 		return (close(pip->prev_fd), close(fd[0]), (void)0);
-	if (pip->pid.pid[i] == 0)
+	if (pip->pid.pid[pip->cmd_count - 1] == 0)
 		ft_process_child(&(*pip), envp, fd, i);
-	ft_wait_all_child_not_block(pip);
 	close(pip->prev_fd);
 	pip->prev_fd = -1;
 }
 
 void	ft_wait_all_child(t_pipex *pip)
 {
-	int		j;
-	t_pid	*pid;
+	t_pid	*pids;
+	int		res_pid;
+	int		stats;
+	int		index[2];
 
-	j = 0;
-	pid = &pip->pid;
-	while (j < pip->cmd_count)
+	index[0] = 0;
+	pids = &pip->pid;
+	while (index[0] < pip->cmd_count)
 	{
-		if (pip->pid.pid[j] != -1)
+		res_pid = wait(&stats);
+		index[1] = 0;
+		while (index[1] < pip->cmd_count)
 		{
-			waitpid(pid->pid[j], &(pid->status[j]), 0);
+			if (res_pid == pids->pid[index[1]])
+				pids->status[index[1]] = stats;
+			index[1] += 1;
 		}
-		j++;
+		index[0] += 1;
 	}
 }

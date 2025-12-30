@@ -6,7 +6,7 @@
 /*   By: demane <emanedanielakim@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/20 22:41:28 by demane            #+#    #+#             */
-/*   Updated: 2025/12/24 22:16:56 by demane           ###   ########.fr       */
+/*   Updated: 2025/12/30 16:32:02 by demane           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ int	ft_here_doc(t_pipex *pip, char *limiter)
 	}
 	return (close(fd[1]), pip->infile = fd[0], 0);
 }
-
 
 void	ft_verif_here_doc(t_pipex *pip, char **av)
 {

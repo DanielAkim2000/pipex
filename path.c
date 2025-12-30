@@ -6,7 +6,7 @@
 /*   By: demane <emanedanielakim@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/20 21:40:32 by demane            #+#    #+#             */
-/*   Updated: 2025/12/26 01:03:55 by demane           ###   ########.fr       */
+/*   Updated: 2025/12/30 17:06:47 by demane           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,56 +43,63 @@ int	ft_access(char *path, t_pipex p)
 	return (0);
 }
 
-char	*ft_get_path(char **envp, t_cmd cmd, t_pipex p)
+void	ft_free_all_split_val(char ***split_val)
+{
+	char	**free_val;
+	int		i;
+
+	free_val = *split_val;
+	if (!free_val)
+		return ((void)0);
+	i = 0;
+	while (free_val[i])
+	{
+		ft_free((void **)&free_val[i]);
+		i++;
+	}
+	ft_free((void **)&free_val);
+}
+
+char	*ft_try_paths(char ***split_val, char *cmd_name, t_pipex p)
 {
 	char	*path;
-	int		index;
-	char	**split_val;
 	int		i;
-	int		j;
 
-	if (!cmd.cmd || ft_strlen(cmd.cmd) == 0 || ft_str_is_space(cmd.cmd))
-		ft_throw_err_cmd_not_found(cmd, (void **)NULL, p);
-	if (ft_access(cmd.cmd, p))
-	{
-		path = ft_strdup(cmd.cmd);
-		if (!path)
-		{
-			ft_free_all_pipex(&p);
-			exit(1);
-		}
-		return (path);
-	}
-	index = ft_get_index_path(envp);
-	if (index == -1)
-	{
-		ft_throw_err_cmd_not_found(cmd, (void **)NULL, p);
-		return (NULL);
-	}
-	split_val = NULL;
-	path = envp[index] + 5;
-	split_val = ft_split(path, ':');
-	if (!split_val)
-		return (NULL);
 	i = -1;
-	while (split_val[++i])
+	while ((*split_val)[++i])
 	{
-		path = ft_strjoin_sep(split_val[i], cmd.cmd, '/');
+		path = ft_strjoin_sep((*split_val)[i], cmd_name, '/');
 		if (!path)
 		{
-			j = -1;
-			while (split_val[++j])
-				ft_free((void **)&split_val[j]);
-			ft_free((void **)&split_val);
+			ft_free_all_split_val(split_val);
 			ft_free_all_pipex(&p);
 			exit(1);
 		}
 		if (ft_access(path, p))
-			return (ft_free((void **)&split_val[i]),\
-				ft_free((void **)&split_val), path);
-		ft_free((void **)&split_val[i]);
+			return (ft_free_all_split_val(split_val), path);
 		ft_free((void **)&path);
 	}
-	ft_throw_err_cmd_not_found(cmd, (void **)&split_val, p);
-	return (NULL);
+	return (ft_free_all_split_val(split_val), NULL);
+}
+
+char	*ft_get_path(char **envp, t_cmd cmd, t_pipex p)
+{
+	char	*path;
+	char	**split_val;
+	int		index;
+
+	if (!cmd.cmd || ft_strlen(cmd.cmd) == 0 || ft_str_is_space(cmd.cmd))
+		ft_throw_err_cmd_not_found(cmd, NULL, p);
+	if (ft_access(cmd.cmd, p))
+		return (ft_strdup(cmd.cmd));
+	index = ft_get_index_path(envp);
+	if (index == -1)
+		return (ft_throw_err_cmd_not_found(cmd, NULL, p), NULL);
+	split_val = ft_split(envp[index] + 5, ':');
+	if (!split_val)
+		return (NULL);
+	path = ft_try_paths(&split_val, cmd.cmd, p);
+	if (!path)
+		ft_throw_err_cmd_not_found(cmd, NULL, p);
+	return (path);
 }

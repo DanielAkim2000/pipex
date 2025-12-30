@@ -6,7 +6,7 @@
 /*   By: demane <emanedanielakim@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/19 14:51:15 by demane            #+#    #+#             */
-/*   Updated: 2025/12/26 00:34:12 by demane           ###   ########.fr       */
+/*   Updated: 2025/12/26 14:31:41 by demane           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,11 @@ void	ft_invalid_ac_av_envp(int ac)
 		ft_putstr_fd("error: invalid number of arguments\n", 2);
 		exit (1);
 	}
-	// if (!envp)
-	// {
-	// 	ft_putstr_fd("envp: Not envp setted\n", STDERR_FILENO);
-	// 	exit(1);
-	// }
 }
 
 void	ft_verif_infile(t_pipex *pip, char **av)
 {
-	if ((pip->infile == -1))
+	if (pip->infile == -1)
 	{
 		perror(av[1]);
 		pip->infile = open("/dev/null", O_RDONLY);
