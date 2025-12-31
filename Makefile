@@ -6,7 +6,7 @@
 #    By: demane <emanedanielakim@gmail.com>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/22 11:34:31 by demane            #+#    #+#              #
-#    Updated: 2025/12/30 15:18:42 by demane           ###   ########.fr        #
+#    Updated: 2025/12/31 18:33:19 by demane           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -61,4 +61,4 @@ re: fclean all
 
 rebonus: fclean bonus
 
-.PHONY: all re fclean bonus clean
+.PHONY: all re fclean bonus clean re rebonus
