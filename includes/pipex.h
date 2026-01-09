@@ -6,7 +6,7 @@
 /*   By: demane <emanedanielakim@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/19 14:51:47 by demane            #+#    #+#             */
-/*   Updated: 2025/12/30 16:32:30 by demane           ###   ########.fr       */
+/*   Updated: 2026/01/06 13:05:28 by demane           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@
 # include <sys/types.h>
 # include <fcntl.h>
 # include "../libft/libft.h"
-# include <stdio.h>
 # include <errno.h>
+# include <stdio.h>
 
 typedef struct s_cmd
 {
