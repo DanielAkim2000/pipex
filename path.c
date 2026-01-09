@@ -6,7 +6,7 @@
 /*   By: demane <emanedanielakim@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/20 21:40:32 by demane            #+#    #+#             */
-/*   Updated: 2026/01/06 13:16:38 by demane           ###   ########.fr       */
+/*   Updated: 2026/01/09 17:34:48 by demane           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,31 +25,13 @@ int	ft_get_index_path(char **envp)
 	return (-1);
 }
 
-int	ft_access(char *path, t_pipex p)
-{
-	int	acs_val;
-
-	if (!path)
-		return (0);
-	if (ft_strchr(path, '/') == NULL)
-		return (0);
-	acs_val = access(path, X_OK);
-	if (acs_val == 0)
-		return (1);
-	if (errno == EACCES)
-	{
-		perror(path);
-		ft_free_all_pipex(&p);
-		exit(126);
-	}
-	return (0);
-}
-
 void	ft_free_all_split_val(char ***split_val)
 {
 	char	**free_val;
 	int		i;
 
+	if (!split_val)
+		return ((void)0);
 	free_val = *split_val;
 	if (!free_val)
 		return ((void)0);
@@ -60,6 +42,30 @@ void	ft_free_all_split_val(char ***split_val)
 		i++;
 	}
 	ft_free((void **)&free_val);
+}
+
+int	ft_access(char **path_params, t_pipex p, char ***split_val)
+{
+	int		acs_val;
+	char	*path;
+
+	path = *path_params;
+	if (!path)
+		return (0);
+	if (ft_strchr(path, '/') == NULL)
+		return (0);
+	acs_val = access(path, X_OK);
+	if (acs_val == 0)
+		return (1);
+	if (errno == EACCES)
+	{
+		perror(path);
+		ft_free((void **)&path);
+		ft_free_all_split_val(split_val);
+		ft_free_all_pipex(&p);
+		exit(126);
+	}
+	return (0);
 }
 
 char	*ft_try_paths(char ***split_val, char *cmd_name, t_pipex p)
@@ -77,7 +83,7 @@ char	*ft_try_paths(char ***split_val, char *cmd_name, t_pipex p)
 			ft_free_all_pipex(&p);
 			exit(1);
 		}
-		if (ft_access(path, p))
+		if (ft_access(&path, p, split_val))
 			return (ft_free_all_split_val(split_val), path);
 		ft_free((void **)&path);
 	}
@@ -92,7 +98,7 @@ char	*ft_get_path(char **envp, t_cmd cmd, t_pipex p)
 
 	if (!cmd.cmd || ft_strlen(cmd.cmd) == 0 || ft_str_is_space(cmd.cmd))
 		ft_throw_err_cmd_not_found(cmd, NULL, p);
-	if (ft_access(cmd.cmd, p))
+	if (ft_access(&(cmd.cmd), p, NULL))
 		return (ft_strdup(cmd.cmd));
 	index = ft_get_index_path(envp);
 	if (index == -1)
