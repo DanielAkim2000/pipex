@@ -6,7 +6,7 @@
 #    By: demane <emanedanielakim@gmail.com>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/22 11:34:31 by demane            #+#    #+#              #
-#    Updated: 2026/01/12 15:07:17 by demane           ###   ########.fr        #
+#    Updated: 2026/01/12 15:13:42 by demane           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,7 @@ LIBFT = $(LIBFT_DIR)/libft.a
 
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -I.
-RM = rm -rf
+RM = @rm -rf
 
 all: $(NAME_TMP)
 
