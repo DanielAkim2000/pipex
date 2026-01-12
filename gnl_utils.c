@@ -6,7 +6,7 @@
 /*   By: demane <emanedanielakim@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 14:32:14 by demane            #+#    #+#             */
-/*   Updated: 2026/01/12 13:56:49 by demane           ###   ########.fr       */
+/*   Updated: 2026/01/12 15:26:42 by demane           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,8 +98,7 @@ void	ft_supp_maillon(t_line **l, int fd, t_line init)
 				prev->next = next;
 			else
 				*l = next;
-			if (current->line)
-				free(current->line);
+			free(current->line);
 			current->line = NULL;
 			if (current->fd != init.fd)
 				free(current);
