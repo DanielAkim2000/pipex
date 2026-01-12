@@ -6,7 +6,7 @@
 /*   By: demane <emanedanielakim@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 13:19:32 by demane            #+#    #+#             */
-/*   Updated: 2025/11/08 13:23:31 by demane           ###   ########.fr       */
+/*   Updated: 2026/01/12 15:00:37 by demane           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,11 @@
 
 void	ft_putstr_fd(char *s, int fd)
 {
-	if (s)
-		while (*s)
-			ft_putchar_fd(*(s++), fd);
+	int	len;
+
+	if (!s)
+		return ((void)0);
+	len = ft_strlen(s);
+	if (len)
+		write(fd, s, len);
 }
