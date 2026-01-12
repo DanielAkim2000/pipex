@@ -6,7 +6,7 @@
 /*   By: demane <emanedanielakim@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/24 16:53:43 by demane            #+#    #+#             */
-/*   Updated: 2025/12/30 17:03:59 by demane           ###   ########.fr       */
+/*   Updated: 2026/01/11 17:23:39 by demane           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,14 @@ void	ft_throw_error_cmd(char *err_p, t_pipex p)
 	exit(1);
 }
 
-void	ft_throw_err_cmd_not_found(t_cmd cmd, void **split_val, t_pipex p)
+void	ft_throw_err_cmd_not_found(char *err_p, void **split_val, t_pipex p)
 {
-	perror(cmd.cmd);
-	ft_putstr_fd(cmd.cmd, STDERR_FILENO);
-	ft_putstr_fd(": command not found", STDERR_FILENO);
-	ft_putstr_fd("\n", STDERR_FILENO);
+	char	*mess;
+
+	mess = ft_strjoin(err_p, ": command not found\n");
+	// perror(cmd.cmd);
+	ft_putstr_fd(mess, STDERR_FILENO);
+	ft_free((void **)&mess);
 	ft_free_all_pipex(&p);
 	ft_free(split_val);
 	exit(127);

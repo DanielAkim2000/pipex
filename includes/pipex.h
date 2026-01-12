@@ -6,7 +6,7 @@
 /*   By: demane <emanedanielakim@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/19 14:51:47 by demane            #+#    #+#             */
-/*   Updated: 2026/01/06 13:05:28 by demane           ###   ########.fr       */
+/*   Updated: 2026/01/11 17:37:31 by demane           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include "../libft/libft.h"
 # include <errno.h>
 # include <stdio.h>
+# include "../get_next_line.h"
 
 typedef struct s_cmd
 {
@@ -52,7 +53,6 @@ t_cmd	ft_parse_cmd(char *cmd_line);
 char	*ft_get_path(char **envp, t_cmd cmd, t_pipex p);
 int		ft_here_doc(t_pipex *pip, char *limiter);
 int		ft_exec_cmd(char *path, t_cmd *cmd, char **envp, t_pipex p);
-char	*get_next_line(int fd);
 void	ft_throw_error_cmd(char *err_p, t_pipex p);
 void	ft_free_all_pipex(t_pipex *p);
 void	ft_free_all_pipex(t_pipex *p);
@@ -63,6 +63,6 @@ void	ft_wait_all_child(t_pipex *pip);
 void	ft_verif_here_doc(t_pipex *pip, char **av);
 void	ft_alloc_pip(t_pipex *pip);
 int		ft_exit_pg(t_pipex *pip);
-void	ft_throw_err_cmd_not_found(t_cmd cmd, void **split_val, t_pipex p);
+void	ft_throw_err_cmd_not_found(char *err_p, void **split_val, t_pipex p);
 
 #endif

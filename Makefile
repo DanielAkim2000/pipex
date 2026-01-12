@@ -6,59 +6,60 @@
 #    By: demane <emanedanielakim@gmail.com>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/22 11:34:31 by demane            #+#    #+#              #
-#    Updated: 2025/12/31 18:33:19 by demane           ###   ########.fr        #
+#    Updated: 2026/01/12 14:38:05 by demane           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME_BONUS = pipex_bonus
-NAME_MANDATORY = pipex
+NAME = pipex
+NAME_TMP = .mandatory
+BONUS_FILE = .bonus
 
-SRCS = error.c exec.c free.c get_next_line.c get_next_line_utils.c \
-			here_doc.c init.c main_mandatory.c parse.c path.c process.c utils.c
+SRCS_COMMON = error.c exec.c free.c gnl.c gnl_utils.c \
+              here_doc.c init.c parse.c path.c process.c utils.c
 
-SRCS_BONUS = error.c exec.c free.c get_next_line.c get_next_line_utils.c \
-			here_doc.c init.c main_bonus.c parse.c path.c process.c utils.c
+SRCS_MANDATORY = $(SRCS_COMMON) main_mandatory.c
+SRCS_BONUS     = $(SRCS_COMMON) main_bonus.c
 
-OBJS = $(SRCS:.c=.o)
-
-OBJS_BONUS = $(SRCS_BONUS:.c=.o)
+OBJS_MANDATORY = $(SRCS_MANDATORY:.c=.o)
+OBJS_BONUS     = $(SRCS_BONUS:.c=.o)
 
 LIBFT_DIR = ./libft
-
 LIBFT = $(LIBFT_DIR)/libft.a
 
-CC = cc -I.
-
+CC = cc
+CFLAGS = -Wall -Wextra -Werror -I.
 RM = rm -rf
 
-FLAGS = -Wall -Wextra -Werror
+all: $(NAME_TMP)
 
-all : $(NAME_MANDATORY)
+bonus: $(BONUS_FILE)
 
-bonus: $(NAME_BONUS)
+$(NAME_TMP): $(OBJS_MANDATORY) $(LIBFT)
+	$(CC) $(CFLAGS) $(OBJS_MANDATORY) $(LIBFT) -o $(NAME)
+	@rm -rf $(BONUS_FILE)
+	@touch $(NAME_TMP)
 
-$(NAME_MANDATORY): $(OBJS) $(LIBFT)
-	$(CC) $(FLAGS)  $(OBJS) $(LIBFT) -o $(NAME_MANDATORY)
-
-$(NAME_BONUS): $(OBJS_BONUS) $(LIBFT)
-	$(CC) $(FLAGS)  $(OBJS_BONUS) $(LIBFT) -o $(NAME_BONUS)
+$(BONUS_FILE): $(OBJS_BONUS) $(LIBFT)
+	$(CC) $(CFLAGS) $(OBJS_BONUS) $(LIBFT) -o $(NAME)
+	@rm -rf $(NAME_TMP)
+	@touch $(BONUS_FILE)
 
 $(LIBFT):
-	make --directory=$(LIBFT_DIR)
+	make -C $(LIBFT_DIR)
 
 %.o: %.c
-	$(CC) $(FLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	make --directory=$(LIBFT_DIR) clean
-	$(RM) $(OBJS_BONUS) $(OBJS)
+	make -C $(LIBFT_DIR) clean
+	$(RM) $(OBJS_MANDATORY) $(OBJS_BONUS)
 
 fclean: clean
-	make --directory=$(LIBFT_DIR) fclean
-	$(RM) $(NAME_BONUS) $(NAME_MANDATORY)
+	make -C $(LIBFT_DIR) fclean
+	$(RM) $(NAME) $(BONUS_FILE) $(NAME_TMP)
 
 re: fclean all
-
 rebonus: fclean bonus
 
-.PHONY: all re fclean bonus clean re rebonus
+.PHONY: all bonus clean fclean re rebonus
+

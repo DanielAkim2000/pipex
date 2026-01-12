@@ -6,7 +6,7 @@
 /*   By: demane <emanedanielakim@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/20 21:40:32 by demane            #+#    #+#             */
-/*   Updated: 2026/01/09 17:34:48 by demane           ###   ########.fr       */
+/*   Updated: 2026/01/11 17:21:29 by demane           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,17 +97,17 @@ char	*ft_get_path(char **envp, t_cmd cmd, t_pipex p)
 	int		index;
 
 	if (!cmd.cmd || ft_strlen(cmd.cmd) == 0 || ft_str_is_space(cmd.cmd))
-		ft_throw_err_cmd_not_found(cmd, NULL, p);
+		ft_throw_err_cmd_not_found(cmd.cmd, NULL, p);
 	if (ft_access(&(cmd.cmd), p, NULL))
 		return (ft_strdup(cmd.cmd));
 	index = ft_get_index_path(envp);
 	if (index == -1)
-		return (ft_throw_err_cmd_not_found(cmd, NULL, p), NULL);
+		return (ft_throw_err_cmd_not_found(cmd.cmd, NULL, p), NULL);
 	split_val = ft_split(envp[index] + 5, ':');
 	if (!split_val)
 		return (NULL);
 	path = ft_try_paths(&split_val, cmd.cmd, p);
 	if (!path)
-		ft_throw_err_cmd_not_found(cmd, NULL, p);
+		ft_throw_err_cmd_not_found(cmd.cmd, NULL, p);
 	return (path);
 }

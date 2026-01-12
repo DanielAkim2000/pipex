@@ -6,7 +6,7 @@
 /*   By: demane <emanedanielakim@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 14:32:17 by demane            #+#    #+#             */
-/*   Updated: 2025/12/23 15:02:04 by demane           ###   ########.fr       */
+/*   Updated: 2025/12/26 17:39:47 by demane           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,34 +96,30 @@ int	ft_recup_next_line(t_line *l)
 	return (free(buffer), size_read);
 }
 
-t_line	*ft_init_line(t_line *l, int fd)
+t_line	*ft_init_line(t_line **l, int fd)
 {
 	t_line	*tmp;
 	t_line	*prev;
 
 	if (!l)
-		tmp = l;
-	else
+		return (NULL);
+	tmp = *l;
+	while (tmp)
 	{
-		tmp = l;
-		while (tmp)
-		{
-			if (tmp->fd == fd)
-				return (tmp);
-			prev = tmp;
-			tmp = tmp->next;
-		}
-		tmp = (t_line *)malloc(sizeof(t_line) * 1);
-		if (!tmp)
-			return (NULL);
-		prev->next = tmp;
+		if (tmp->fd == fd)
+			return (tmp);
+		prev = tmp;
+		tmp = tmp->next;
 	}
+	tmp = (t_line *)malloc(sizeof(t_line) * 1);
+	if (!tmp)
+		return (NULL);
+	prev->next = tmp;
 	return ((tmp)->fd = fd, tmp->line = NULL, tmp->next = NULL, tmp);
 }
 
-char	*get_next_line(int fd)
+char	*get_next_line(int fd, t_line *l)
 {
-	static t_line	l;
 	t_line			*current;
 	int				result_recup;
 	char			*rv;
@@ -136,11 +132,11 @@ char	*get_next_line(int fd)
 	result_recup = ft_recup_next_line(current);
 	if (result_recup == -1)
 	{
-		ft_supp_maillon(&l, fd, l);
+		ft_supp_maillon(&l, fd, *l);
 		return (NULL);
 	}
 	rv = ft_return_line(current);
 	if (!rv)
-		ft_supp_maillon(&l, fd, l);
+		ft_supp_maillon(&l, fd, *l);
 	return (rv);
 }

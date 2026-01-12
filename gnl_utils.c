@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*   gnl_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: demane <emanedanielakim@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 14:32:14 by demane            #+#    #+#             */
-/*   Updated: 2025/12/23 15:02:35 by demane           ###   ########.fr       */
+/*   Updated: 2026/01/12 13:56:49 by demane           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,14 +81,14 @@ int	ft_reintialise(t_line **l)
 		return (free((*l)->line), (*l)->line = NULL, 0);
 }
 
-void	ft_supp_maillon(t_line *l, int fd, t_line init)
+void	ft_supp_maillon(t_line **l, int fd, t_line init)
 {
 	t_line	*prev;
 	t_line	*next;
 	t_line	*current;
 
 	prev = NULL;
-	current = l;
+	current = *l;
 	while (current)
 	{
 		next = current->next;
@@ -97,8 +97,10 @@ void	ft_supp_maillon(t_line *l, int fd, t_line init)
 			if (prev)
 				prev->next = next;
 			else
-				l = next;
-			free(current->line);
+				*l = next;
+			if (current->line)
+				free(current->line);
+			current->line = NULL;
 			if (current->fd != init.fd)
 				free(current);
 			current = NULL;
