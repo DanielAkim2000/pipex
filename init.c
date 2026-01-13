@@ -6,7 +6,7 @@
 /*   By: demane <emanedanielakim@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/19 15:30:38 by demane            #+#    #+#             */
-/*   Updated: 2025/12/30 16:32:59 by demane           ###   ########.fr       */
+/*   Updated: 2026/01/13 00:57:41 by demane           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,9 @@ void	ft_init_pipex_bonus(int ac, char **av, t_pipex *pip)
 	pip->cmds = NULL;
 	(&(pip->pid))->pid = NULL;
 	(&(pip->pid))->status = NULL;
+	pip->infile_err = 0;
+	pip->infile_msg_aff = 0;
+	pip->av = av;
 }
 
 void	ft_init_pipex_mandatory(int ac, char **av, t_pipex *pip)
@@ -47,4 +50,7 @@ void	ft_init_pipex_mandatory(int ac, char **av, t_pipex *pip)
 	pip->cmds = NULL;
 	(&(pip->pid))->pid = NULL;
 	(&(pip->pid))->status = NULL;
+	pip->infile_err = 0;
+	pip->infile_msg_aff = 0;
+	pip->av = av;
 }

@@ -6,7 +6,7 @@
 /*   By: demane <emanedanielakim@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/19 14:51:15 by demane            #+#    #+#             */
-/*   Updated: 2025/12/26 14:31:41 by demane           ###   ########.fr       */
+/*   Updated: 2026/01/13 03:20:49 by demane           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,12 @@ void	ft_invalid_ac_av_envp(int ac)
 	}
 }
 
-void	ft_verif_infile(t_pipex *pip, char **av)
+void	ft_verif_infile(t_pipex *pip)
 {
 	if (pip->infile == -1)
 	{
-		perror(av[1]);
+		pip->msg_inf = strerror(errno);
+		pip->infile_err = 1;
 		pip->infile = open("/dev/null", O_RDONLY);
 		if (pip->infile == -1)
 		{
@@ -41,11 +42,13 @@ int	main(int ac, char **av, char **envp)
 
 	ft_invalid_ac_av_envp(ac);
 	ft_init_pipex_mandatory(ac, av, &pip);
-	ft_verif_infile(&pip, av);
+	ft_verif_infile(&pip);
 	ft_verif_here_doc(&pip, av);
 	ft_alloc_pip(&pip);
 	ft_parse_all_cmd(&pip, av);
 	ft_process_parent(&pip, envp);
 	ft_wait_all_child(&pip);
+	if (pip.infile_err == 1 && !pip.here_doc)
+		ft_write_infile_err(&pip);
 	return (ft_exit_pg(&pip));
 }

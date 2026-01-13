@@ -6,7 +6,7 @@
 /*   By: demane <emanedanielakim@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/20 22:41:24 by demane            #+#    #+#             */
-/*   Updated: 2025/12/30 17:11:16 by demane           ###   ########.fr       */
+/*   Updated: 2026/01/13 03:18:47 by demane           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ void	ft_redirec_to_outfile(t_pipex *pip, char **envp, int index)
 	pip->outfile = open(pip->outfile_name, pip->open_mode, 0644);
 	if (pip->outfile == -1)
 	{
-		close(pip->prev_fd);
 		perror(pip->outfile_name);
+		close(pip->prev_fd);
 		ft_free_all_pipex(&(*pip));
 		exit(1);
 	}
@@ -51,13 +51,15 @@ void	ft_process_child(t_pipex *pip, char **envp, int fd[2], int index)
 		ft_redirec_to_outfile(pip, envp, index);
 }
 
+
+
 int	ft_process_cmd_not_end(int *i, t_pipex *pip, int fd[2], char **envp)
 {
 	while (++(*i) < pip->cmd_count - 1)
 	{
 		if (pipe(fd) == -1)
 		{
-			if (i == 0)
+			if (*i == 0)
 				close(pip->prev_fd);
 			return (-1);
 		}
@@ -84,7 +86,7 @@ void	ft_process_parent(t_pipex *pip, char **envp)
 	pip->prev_fd = pip->infile;
 	fd[0] = -1;
 	fd[1] = -1;
-	i = -1;
+	i = -1 + pip->infile_err;
 	if (ft_process_cmd_not_end(&i, pip, fd, envp) == -1)
 		return ((void)0);
 	pip->pid.pid[pip->cmd_count -1] = fork();

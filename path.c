@@ -6,7 +6,7 @@
 /*   By: demane <emanedanielakim@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/20 21:40:32 by demane            #+#    #+#             */
-/*   Updated: 2026/01/11 17:21:29 by demane           ###   ########.fr       */
+/*   Updated: 2026/01/13 03:38:47 by demane           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	ft_free_all_split_val(char ***split_val)
 	ft_free((void **)&free_val);
 }
 
-int	ft_access(char **path_params, t_pipex p, char ***split_val)
+int	ft_access(char **path_params, t_pipex p, char ***split_val, int bool)
 {
 	int		acs_val;
 	char	*path;
@@ -60,7 +60,8 @@ int	ft_access(char **path_params, t_pipex p, char ***split_val)
 	if (errno == EACCES)
 	{
 		perror(path);
-		ft_free((void **)&path);
+		if (bool)
+			ft_free((void **)&path);
 		ft_free_all_split_val(split_val);
 		ft_free_all_pipex(&p);
 		exit(126);
@@ -83,7 +84,7 @@ char	*ft_try_paths(char ***split_val, char *cmd_name, t_pipex p)
 			ft_free_all_pipex(&p);
 			exit(1);
 		}
-		if (ft_access(&path, p, split_val))
+		if (ft_access(&path, p, split_val, 1))
 			return (ft_free_all_split_val(split_val), path);
 		ft_free((void **)&path);
 	}
@@ -98,7 +99,7 @@ char	*ft_get_path(char **envp, t_cmd cmd, t_pipex p)
 
 	if (!cmd.cmd || ft_strlen(cmd.cmd) == 0 || ft_str_is_space(cmd.cmd))
 		ft_throw_err_cmd_not_found(cmd.cmd, NULL, p);
-	if (ft_access(&(cmd.cmd), p, NULL))
+	if (ft_access(&(cmd.cmd), p, NULL, 0))
 		return (ft_strdup(cmd.cmd));
 	index = ft_get_index_path(envp);
 	if (index == -1)

@@ -6,7 +6,7 @@
 /*   By: demane <emanedanielakim@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/19 14:51:15 by demane            #+#    #+#             */
-/*   Updated: 2026/01/12 15:03:12 by demane           ###   ########.fr       */
+/*   Updated: 2026/01/13 03:18:24 by demane           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,17 +21,18 @@ void	ft_invalid_ac_av_envp(int ac, char **av)
 	}
 	if (ft_strncmp(av[1], "here_doc", 8) == 0 && ac < 6)
 	{
-		ft_putstr_fd("Error: invalid number of arguments for here_doc\n", \
-						STDERR_FILENO);
+		ft_putstr_fd("Error: invalid number of arguments for here_doc\n",
+			STDERR_FILENO);
 		exit (1);
 	}
 }
 
-void	ft_verif_infile(t_pipex *pip, char **av)
+void	ft_verif_infile(t_pipex *pip)
 {
 	if ((pip->infile == -1 && !pip->here_doc))
 	{
-		perror(av[1]);
+		pip->msg_inf = strerror(errno);
+		pip->infile_err = 1;
 		pip->infile = open("/dev/null", O_RDONLY);
 		if (pip->infile == -1)
 		{
@@ -47,11 +48,13 @@ int	main(int ac, char **av, char **envp)
 
 	ft_invalid_ac_av_envp(ac, av);
 	ft_init_pipex_bonus(ac, av, &pip);
-	ft_verif_infile(&pip, av);
+	ft_verif_infile(&pip);
 	ft_verif_here_doc(&pip, av);
 	ft_alloc_pip(&pip);
 	ft_parse_all_cmd(&pip, av);
 	ft_process_parent(&pip, envp);
 	ft_wait_all_child(&pip);
+	if (pip.infile_err == 1 && !pip.here_doc)
+		ft_write_infile_err(&pip);
 	return (ft_exit_pg(&pip));
 }
