@@ -6,7 +6,7 @@
 /*   By: demane <emanedanielakim@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/20 22:41:24 by demane            #+#    #+#             */
-/*   Updated: 2026/01/14 17:14:09 by demane           ###   ########.fr       */
+/*   Updated: 2026/01/14 17:26:33 by demane           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,6 @@ void	ft_process_child(t_pipex *pip, char **envp, int fd[2], int index)
 	else
 		ft_redirec_to_outfile(pip, envp, index);
 }
-
-
 
 int	ft_process_cmd_not_end(int *i, t_pipex *pip, int fd[2], char **envp)
 {

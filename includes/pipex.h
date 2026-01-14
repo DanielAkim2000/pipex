@@ -6,7 +6,7 @@
 /*   By: demane <emanedanielakim@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/19 14:51:47 by demane            #+#    #+#             */
-/*   Updated: 2026/01/14 16:55:09 by demane           ###   ########.fr       */
+/*   Updated: 2026/01/14 17:26:49 by demane           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void	ft_throw_err_cmd_not_found(char *err_p, void **split_val, t_pipex p);
 int		ft_write_infile_err(t_pipex *pip);
 int		ft_get_index_path(char **envp);
 void	ft_free_all_split_val(char ***split_val);
-int	ft_access(char **path_params, t_pipex p, char ***split_val, int bool);
+int		ft_access(char **path_params, t_pipex p, char ***split_val, int bool);
 char	*ft_try_paths(char ***split_val, char *cmd_name, t_pipex p);
 
 #endif
