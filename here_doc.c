@@ -6,7 +6,7 @@
 /*   By: demane <emanedanielakim@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/20 22:41:28 by demane            #+#    #+#             */
-/*   Updated: 2026/01/13 03:31:13 by demane           ###   ########.fr       */
+/*   Updated: 2026/01/14 17:01:19 by demane           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ int	ft_here_doc(t_pipex *pip, char *limiter)
 	pid = fork();
 	if (pid < 0)
 		return (perror("fork"), -1);
+	pip->pid_here_doc = pid;
 	if (pid == 0)
 	{
 		close(fd[0]);
@@ -56,7 +57,7 @@ int	ft_here_doc(t_pipex *pip, char *limiter)
 		ft_free((void **)&(l.line));
 		exit(0);
 	}
-	return (wait(NULL), close(fd[1]), pip->infile = fd[0], 0);
+	return (close(fd[1]), pip->infile = fd[0], 0);
 }
 
 void	ft_verif_here_doc(t_pipex *pip, char **av)

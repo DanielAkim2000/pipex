@@ -6,7 +6,7 @@
 /*   By: demane <emanedanielakim@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/19 14:51:47 by demane            #+#    #+#             */
-/*   Updated: 2026/01/13 03:38:31 by demane           ###   ########.fr       */
+/*   Updated: 2026/01/14 16:55:09 by demane           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ typedef struct s_pipex
 	t_cmd	*cmds;
 	int		prev_fd;
 	t_pid	pid;
+	pid_t	pid_here_doc;
 	char	*outfile_name;
 	int		open_mode;
 	char	**av;

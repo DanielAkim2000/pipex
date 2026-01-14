@@ -6,7 +6,7 @@
 /*   By: demane <emanedanielakim@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/20 22:41:24 by demane            #+#    #+#             */
-/*   Updated: 2026/01/13 03:18:47 by demane           ###   ########.fr       */
+/*   Updated: 2026/01/14 17:14:09 by demane           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,9 +107,14 @@ void	ft_wait_all_child(t_pipex *pip)
 
 	index[0] = 0;
 	pids = &pip->pid;
-	while (index[0] < pip->cmd_count)
+	while (index[0] < pip->cmd_count + pip->here_doc)
 	{
 		res_pid = wait(&stats);
+		if (pip->here_doc && res_pid == pip->pid_here_doc)
+		{
+			index[0] += 1;
+			continue ;
+		}
 		index[1] = 0;
 		while (index[1] < pip->cmd_count)
 		{
