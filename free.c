@@ -6,7 +6,7 @@
 /*   By: demane <emanedanielakim@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/24 20:43:22 by demane            #+#    #+#             */
-/*   Updated: 2026/01/13 01:47:24 by demane           ###   ########.fr       */
+/*   Updated: 2026/01/17 01:08:23 by demane           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,4 +39,6 @@ void	ft_free_all_pipex(t_pipex *p)
 	}
 	ft_free_pid(&p->pid);
 	ft_free((void **)&p->cmds);
+	ft_free((void **)&p->l.line);
+	ft_free((void **)&p->l.next);
 }

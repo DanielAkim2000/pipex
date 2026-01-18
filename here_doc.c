@@ -6,13 +6,13 @@
 /*   By: demane <emanedanielakim@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/20 22:41:28 by demane            #+#    #+#             */
-/*   Updated: 2026/01/14 17:01:19 by demane           ###   ########.fr       */
+/*   Updated: 2026/01/19 00:22:38 by demane           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/pipex.h"
 
-int	ft_write_in_child(int fd[2], char *limiter, t_line *l)
+int	ft_write_here_doc(int fd, char *limiter, t_line *l)
 {
 	char	*str;
 
@@ -26,38 +26,38 @@ int	ft_write_in_child(int fd[2], char *limiter, t_line *l)
 		ft_free((void **)&str);
 		return (1);
 	}
-	write(fd[1], str, ft_strlen(str));
-	free(str);
+	if (write(fd, str, ft_strlen(str)) == -1)
+	{
+		ft_free((void **)&str);
+		ft_free((void **)&l->line);
+		return (-1);
+	}
+	ft_free((void **)&str);
 	return (0);
 }
 
 int	ft_here_doc(t_pipex *pip, char *limiter)
 {
-	int		fd[2];
-	pid_t	pid;
+	int		fd;
 	int		check;
-	t_line	l;
 
-	l.fd = STDIN_FILENO;
-	l.line = NULL;
-	l.next = NULL;
 	check = 0;
-	if (pipe(fd) < 0)
-		return (perror("pipe"), -1);
-	pid = fork();
-	if (pid < 0)
-		return (perror("fork"), -1);
-	pip->pid_here_doc = pid;
-	if (pid == 0)
+	pip->l.fd = STDIN_FILENO;
+	fd = open(".here_doc_tmp", O_CREAT | O_WRONLY | O_TRUNC, 0644);
+	if (fd < 0)
+		return (perror("open"), -1);
+	while (check == 0)
 	{
-		close(fd[0]);
-		while (check == 0)
-			check = ft_write_in_child(fd, limiter, &l);
-		close(fd[1]);
-		ft_free((void **)&(l.line));
-		exit(0);
+		check = ft_write_here_doc(fd, limiter, &pip->l);
+		if (check == -1)
+			return (close(fd), -1);
 	}
-	return (close(fd[1]), pip->infile = fd[0], 0);
+	close(fd);
+	ft_free((void **)&pip->l.line);
+	pip->infile = open(".here_doc_tmp", O_RDONLY);
+	if (pip->infile < 0)
+		return (perror("open"), -1);
+	return (0);
 }
 
 void	ft_verif_here_doc(t_pipex *pip, char **av)

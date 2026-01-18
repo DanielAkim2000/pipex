@@ -6,7 +6,7 @@
 /*   By: demane <emanedanielakim@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/19 14:51:47 by demane            #+#    #+#             */
-/*   Updated: 2026/01/14 17:26:49 by demane           ###   ########.fr       */
+/*   Updated: 2026/01/19 00:05:04 by demane           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <stdio.h>
 # include <string.h>
 # include "../get_next_line.h"
+# include <signal.h>
 
 typedef struct s_cmd
 {
@@ -51,6 +52,7 @@ typedef struct s_pipex
 	char	*outfile_name;
 	int		open_mode;
 	char	**av;
+	t_line	l;
 }	t_pipex;
 
 void	ft_init_pipex_mandatory(int ac, char **av, t_pipex *pip);
